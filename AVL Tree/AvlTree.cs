@@ -19,19 +19,19 @@
     {
         private Node? Root;
 
-        public Node FindNode(int value)
+        public Node? FindNode(int value)
         {
             return FindNodeRecursively(Root, value);
         }
 
-        private Node FindNodeRecursively(Node node, int value)
+        private Node? FindNodeRecursively(Node? node, int value)
         {
-            if (node == null || value == node.Value)
-                return node;
-            if (node.Value < value)
-                return FindNodeRecursively(node.Right, value);
+            if (node == null) return null;
+            if (value == node.Value) return node;
 
-            return FindNodeRecursively(node.Left, value);
+            return value < node.Value
+                ? FindNodeRecursively(node.Left, value)
+                : FindNodeRecursively(node.Right, value);
         }
 
         public bool Find(int value)
@@ -41,11 +41,9 @@
 
         private bool FindRecursively(Node? node, int value)
         {
-            if (node == null)
-                return false;
+            if (node == null) return false;
 
-            if (node.Value == value)
-                return true; // Value found
+            if (node.Value == value) return true; // Value found
 
             return value < node.Value
                 ? FindRecursively(node.Left, value)
@@ -80,10 +78,12 @@
             UpdateHeight(node); // Update the height of the current node
             return ReBalance(node); // Rebalance and return the new root of the subtree
         }
+
         public void Remove(int value)
         {
             Root = RemoveRecursively(Root, value);
         }
+
         private Node FindMin(Node node)
         {
             while (node.Left != null)
@@ -92,6 +92,7 @@
             }
             return node;
         }
+
         private Node FindMax(Node node)
         {
             while (node.Right != null)
@@ -101,7 +102,7 @@
             return node;
         }
 
-        private Node RemoveRecursively(Node node, int value)
+        private Node? RemoveRecursively(Node? node, int value)
         {
             if (node == null)
                 return null;
@@ -136,15 +137,15 @@
                 {
                     if (node.Left.Height > node.Right.Height)
                     {
-                        var succssor = FindMax(node.Left);
-                        node.Value = succssor.Value;
-                        node.Left = RemoveRecursively(node.Left, succssor.Value);
+                        var successor = FindMax(node.Left);
+                        node.Value = successor.Value;
+                        node.Left = RemoveRecursively(node.Left, successor.Value);
                     }
                     else
                     {
-                        var succssor = FindMin(node.Right);
-                        node.Value = succssor.Value;
-                        node.Right = RemoveRecursively(node.Right, succssor.Value);
+                        var successor = FindMin(node.Right);
+                        node.Value = successor.Value;
+                        node.Right = RemoveRecursively(node.Right, successor.Value);
                     }
                 }
             }
@@ -152,7 +153,6 @@
             UpdateHeight(node); // Update the height of the current node
             return ReBalance(node); // Rebalance and return the new root of the subtree
         }
-
 
         private Node ReBalance(Node node)
         {
@@ -209,60 +209,64 @@
             node.Height = Math.Max(leftHeight, rightHeight) + 1;
             node.BF = leftHeight - rightHeight;
         }
-        public Node FindPredecessor(int value)
+
+        public Node? FindPredecessor(int value)
         {
             var currentNode = FindNode(value);
-            if (currentNode == null)
-                return currentNode;
-            if (currentNode.Left != null) ;
-            return FindMax(currentNode.Left);
+            if (currentNode == null) return null;
 
-            Node predecessor = null;
+            if (currentNode.Left != null)
+                return FindMax(currentNode.Left);
+
+            Node? predecessor = null;
             var ancestor = Root;
             while (ancestor != null)
             {
                 if (value > ancestor.Value)
                 {
                     predecessor = ancestor;
-                    ancestor = predecessor.Right;
+                    ancestor = ancestor.Right;
                 }
                 else
                 {
-                    ancestor = predecessor.Left;
+                    ancestor = ancestor.Left;
                 }
             }
+            return predecessor;
         }
-        public Node FindSuccssor(int value)
+
+        public Node? FindSuccessor(int value)
         {
             var currentNode = FindNode(value);
-            if (currentNode == null)
-                return currentNode;
-            if (currentNode.Right != null) ;
-            return FindMin(currentNode.Right);
+            if (currentNode == null) return null;
 
-            Node succssor = null;
+            if (currentNode.Right != null)
+                return FindMin(currentNode.Right);
+
+            Node? successor = null;
             var ancestor = Root;
             while (ancestor != null)
             {
                 if (value < ancestor.Value)
                 {
-                    succssor = ancestor;
-                    ancestor = succssor.Left;
+                    successor = ancestor;
+                    ancestor = ancestor.Left;
                 }
                 else
                 {
-                    ancestor = succssor.Right;
+                    ancestor = ancestor.Right;
                 }
             }
+            return successor;
         }
+
         public void InOrderTraversal()
         {
-
             InOrderTraversal(Root);
         }
-        private void InOrderTraversal(Node node)
-        {
 
+        private void InOrderTraversal(Node? node)
+        {
             if (node != null)
             {
                 InOrderTraversal(node.Left);
@@ -270,39 +274,37 @@
                 InOrderTraversal(node.Right);
             }
         }
+
         public void PreOrderTraversal()
         {
-
             PreOrderTraversal(Root);
         }
-        private void PreOrderTraversal(Node node)
-        {
 
+        private void PreOrderTraversal(Node? node)
+        {
             if (node != null)
             {
                 Console.WriteLine(node.Value);
                 PreOrderTraversal(node.Left);
-
                 PreOrderTraversal(node.Right);
             }
         }
+
         public void PostOrderTraversal()
         {
-
             PostOrderTraversal(Root);
         }
-        private void PostOrderTraversal(Node node)
-        {
 
+        private void PostOrderTraversal(Node? node)
+        {
             if (node != null)
             {
-
                 PostOrderTraversal(node.Left);
-
                 PostOrderTraversal(node.Right);
                 Console.WriteLine(node.Value);
             }
         }
+
         public void LevelOrder()
         {
             if (Root == null) return;

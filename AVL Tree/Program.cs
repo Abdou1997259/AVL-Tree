@@ -26,7 +26,9 @@ tree.Remove(7);
 tree.LevelOrder();
 Console.WriteLine("after Delte 11");
 tree.Remove(11);
+
 tree.LevelOrder();
+Console.WriteLine($"Successor of 13 is {tree.FindSuccessor(13).Value} and the Predecessor {tree.FindPredecessor(13).Value}");
 Console.WriteLine("after Delte 14");
 tree.Remove(14);
 tree.LevelOrder();
