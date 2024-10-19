@@ -16,4 +16,21 @@ tree.Insert(19);
 tree.Insert(16);
 tree.Insert(20);
 tree.LevelOrder();
+
+
+Console.WriteLine("after Delete 8");
+tree.Remove(8);
+tree.LevelOrder();
+Console.WriteLine("after Delte 7");
+tree.Remove(7);
+tree.LevelOrder();
+Console.WriteLine("after Delte 11");
+tree.Remove(11);
+tree.LevelOrder();
+Console.WriteLine("after Delte 14");
+tree.Remove(14);
+tree.LevelOrder();
+Console.WriteLine("after Delte 17");
+tree.Remove(17);
+tree.LevelOrder();
 Console.ReadLine();
